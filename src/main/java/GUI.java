@@ -95,9 +95,9 @@ class LoginPanel extends JPanel {
         errorLabel = new JLabel("Login error", SwingConstants.CENTER);
         errorLabel.setVisible(true);
         errorLabel.setFont(errorFont);
-errorLabel.setForeground(Color.RED);
-errorLabel.setBounds(25, 173, 200, 35);
-add(errorLabel);
+        errorLabel.setForeground(Color.RED);
+        errorLabel.setBounds(25, 173, 200, 35);
+        add(errorLabel);
 
     }
 }
