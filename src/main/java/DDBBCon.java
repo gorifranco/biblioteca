@@ -1,17 +1,27 @@
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.*;
 
-public class DDBBCon {
-    String jdbcURL = "jdbc:mysql://localhost:3307/biblioteca";
-    String username = "localhost";
-    String password = "1234";
-    Connection connection;
-    PreparedStatement preparedStatement;
-    Statement statement;
-    ResultSet resultSet;
 
+public class DDBBCon {
+    private String databaseUrl;
+    private String databaseUser;
+    private String databasePassword;
+    private Connection connection;
+    private PreparedStatement preparedStatement;
+    private Statement statement;
+    private ResultSet resultSet;
+
+    public DDBBCon() {
+        Dotenv dotenv = Dotenv.load();
+        databaseUrl = dotenv.get("DATABASE_URL");
+        databaseUser = dotenv.get("DATABASE_USER");
+        databasePassword = dotenv.get("DATABASE_PASSWORD");
+    }
 
     private void openConnection() throws SQLException, ClassNotFoundException{
-            connection = DriverManager.getConnection(jdbcURL, username, password);
+
+            connection = DriverManager.getConnection(databaseUrl, databaseUser, databasePassword);
             // Cargar el controlador JDBC>
             Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -47,10 +57,14 @@ public class DDBBCon {
     }
     private boolean register(String username, String password) throws SQLException, ClassNotFoundException {
 
+        String sql = "existeixUsuari(" + username + ", " + password + ")";
         openConnection();
 
         try{
-            preparedStatement = connection.prepareStatement();
+            statement = connection.createStatement();
+            return statement.execute(sql);
+        } finally {
+            closeConnections();
         }
     }
 }
